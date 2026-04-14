@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submarine Dash</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="app">
+        <!-- Intro Screen -->
+         <section class="start-screen">
+            <img src="assets/images/logo.png" alt="Submarine Dash" class="start-logo" />
+            <p class="instructions">Prss <strong>Space</strong> or <strong>Arrow Up</strong> to swim upward.<br> Avoid pipes. Collect oxygen tanks. Survive.</p>
+            <button class="start-btn"> <strong>Start</strong> </button>
+         </section>
+
+         <!-- Game Container -->
+          <section class="game-container hidden">
+            <div class="hud">
+                <p class="score-display">Score: <span class="score-value">0</span></p>
+                <div class="oxygen-bar-container">
+                    <div class="oxygen-bar-header">
+                        <p class="oxygen-label">Oxygen Level:</p>
+                        <span class="oxygen-percentage">100%</span>
+                    </div>
+                    <div class="oxygen-bar-fill"></div>
+                </div>
+            </div>
+
+        <!-- The actual play area — submarine and obstacles live in here -->
+        <div class="game-area">
+          <div class="countdown-overlay hidden">
+            <span class="countdown-number">3</span>
+          </div>
+
+          <!-- Submarine — JS controls the 'top' position of this div -->
+          <div class="submarine">
+            <div class="submarine__container">
+              <div class="light"></div>
+              <div class="submarine__periscope"></div>
+              <div class="submarine__periscope-glass"></div>
+              <div class="submarine__sail">
+                <div class="submarine__sail-shadow dark1"></div>
+                <div class="submarine__sail-shadow light1"></div>
+                <div class="submarine__sail-shadow dark2"></div>
+              </div>
+              <div class="submarine__body">
+                <div class="submarine__window one"></div>
+                <div class="submarine__window two"></div>
+                <div class="submarine__shadow-dark"></div>
+                <div class="submarine__shadow-light"></div>
+                <div class="submarine__shadow-arcLight"></div>
+              </div>
+              <div class="submarine__propeller">
+                <div class="propeller__perspective">
+                  <div class="submarine__propeller-parts darkOne"></div>
+                  <div class="submarine__propeller-parts lightOne"></div>
+                </div>
+              </div>
+            </div>
+            <!-- Bubbles trail behind the submarine -->
+            <div class="bubbles__container">
+              <span class="bubbles bubble-1"></span>
+              <span class="bubbles bubble-2"></span>
+              <span class="bubbles bubble-3"></span>
+              <span class="bubbles bubble-4"></span>
+            </div>
+          </div>
+
+          <div class="seaweed-strip" aria-hidden="true">
+            <video class="seaweed-video" autoplay muted loop playsinline preload="auto">
+              <source src="assets/decor/Seaweed.webm" type="video/webm" />
+            </video>
+            <video class="seaweed-video" autoplay muted loop playsinline preload="auto">
+              <source src="assets/decor/Seaweed.webm" type="video/webm" />
+            </video>
+            <video class="seaweed-video" autoplay muted loop playsinline preload="auto">
+              <source src="assets/decor/Seaweed.webm" type="video/webm" />
+            </video>
+            <video class="seaweed-video" autoplay muted loop playsinline preload="auto">
+              <source src="assets/decor/Seaweed.webm" type="video/webm" />
+            </video>
+            <video class="seaweed-video" autoplay muted loop playsinline preload="auto">
+              <source src="assets/decor/Seaweed.webm" type="video/webm" />
+            </video>
+            <video class="seaweed-video" autoplay muted loop playsinline preload="auto">
+              <source src="assets/decor/Seaweed.webm" type="video/webm" />
+            </video>
+            <video class="seaweed-video" autoplay muted loop playsinline preload="auto">
+              <source src="assets/decor/Seaweed.webm" type="video/webm" />
+            </video>
+            <video class="seaweed-video" autoplay muted loop playsinline preload="auto">
+              <source src="assets/decor/Seaweed.webm" type="video/webm" />
+            </video>
+          </div>
+
+          <!-- Decorative sea floor — purely visual, no gameplay role -->
+          <div class="sea-ground__container">
+            <div class="sea-ground ground1">
+              <span class="up-1"></span><span class="up-2"></span>
+              <span class="up-3"></span><span class="up-4"></span>
+              <span class="up-5"></span><span class="up-6"></span>
+              <span class="up-7"></span><span class="up-8"></span>
+              <span class="up-9"></span><span class="up-10"></span>
+            </div>
+            <div class="sea-ground ground2">
+              <span class="up-1"></span><span class="up-2"></span>
+              <span class="up-3"></span><span class="up-4"></span>
+              <span class="up-5"></span><span class="up-6"></span>
+              <span class="up-7"></span><span class="up-8"></span>
+              <span class="up-9"></span><span class="up-10"></span>
+            </div>
+          </div>
+
+        </div>
+
+          </section>
+
+                <!-- ========== GAME OVER SCREEN ========== -->
+      <!-- Hidden until the player loses -->
+      <section class="game-over hidden">
+        <img src="assets/images/game-over.png" alt="Game Over" class="game-over-image" />
+        <p class="final-score-display">Score: <span class="final-score-value">0</span></p>
+        <button class="restart-btn">Play Again</button>
+      </section>
+
+      <p class="control-hint">Use <strong>Space</strong> or <strong>Arrow Up</strong> to keep the submarine afloat.</p>
+    </div>
+
+        <!-- Scripts -->
+    <script src="js/config.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/player.js"></script>
+    <script src="js/obstacles.js"></script>
+    <script src="js/oxygen.js"></script>
+    <script src="js/ui.js"></script>
+    
+  </body>
+</html>
