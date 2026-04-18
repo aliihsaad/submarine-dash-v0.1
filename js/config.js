@@ -2,7 +2,7 @@
 // ==Obstacles== //
 const obstacleGapMargin = 70;
 const obstacleSpawnDelay = 2500;
-const obstacleSpeed = 3;
+let obstacleSpeed = 2;
 const obstacleWidth = 96;
 const obstacleHeight = 520;
 const obstacleAsset = "assets/obstacles/pipe-green.png";

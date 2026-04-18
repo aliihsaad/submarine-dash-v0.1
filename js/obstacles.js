@@ -1,49 +1,64 @@
+class Obstacle {
+  constructor() {
+    // position data
+    this.x = gameArea.offsetWidth;
+    this.width = obstacleWidth;
+    this.scored = false;
 
-
-function spawnObstacle() {
-    const topElement    = document.createElement("img");
-    const bottomElement = document.createElement("img");
-    const obstacleX = gameArea.offsetWidth;
+    // random gap position
     const minGapTop = obstacleGapMargin;
     const maxGapTop = gameArea.offsetHeight - obstacleGap - obstacleGapMargin;
     const gapTop = Math.floor(Math.random() * (maxGapTop - minGapTop + 1)) + minGapTop;
-    const topY = gapTop - obstacleHeight;
-    const bottomY = gapTop + obstacleGap;
 
-      // ── Style the top pipe
-  topElement.classList.add("obstacle", "obstacle-top");
-  topElement.src    = obstacleAsset;
-  topElement.alt    = "";                              
-  topElement.style.left   = obstacleX + "px";
-  topElement.style.top    = topY + "px";
-  topElement.style.width  = obstacleWidth + "px";
-  topElement.style.height = obstacleHeight + "px";
+    // build + style the two pipes
+    this.topElement = this.createPipe("obstacle-top", gapTop - obstacleHeight);
+    this.bottomElement = this.createPipe("obstacle-bottom", gapTop + obstacleGap);
 
-  // ── Style the bottom pipe
-  bottomElement.classList.add("obstacle", "obstacle-bottom");
-  bottomElement.src    = obstacleAsset;
-  bottomElement.alt    = "";
-  bottomElement.style.left   = obstacleX + "px";
-  bottomElement.style.top    = bottomY + "px";
-  bottomElement.style.width  = obstacleWidth + "px";
-  bottomElement.style.height = obstacleHeight + "px";
+    gameArea.appendChild(this.topElement);
+    gameArea.appendChild(this.bottomElement);
+  }
 
+  // helper that builds one pipe img — keeps the constructor short
+  createPipe(extraClass, y) {
+    const el = document.createElement("img");
+    el.classList.add("obstacle", extraClass);
+    el.src = obstacleAsset;
+    el.alt = "";
+    el.style.left = this.x + "px";
+    el.style.top = y + "px";
+    el.style.width = this.width + "px";
+    el.style.height = obstacleHeight + "px";
+    return el;
+  }
 
-  const obstacle = {
-    topElement: topElement,
-    bottomElement: bottomElement,
-    x: obstacleX,
-    width: obstacleWidth,
-    scored: false,
-  };
+  move() {
+    this.x = this.x - obstacleSpeed;
+    this.topElement.style.left = this.x + "px";
+    this.bottomElement.style.left = this.x + "px";
+  }
 
+  isOffScreen() {
+    return this.x + this.width < 0;
+  }
 
-  obstacles.push(obstacle);
-  gameArea.appendChild(topElement);
-  gameArea.appendChild(bottomElement);
+  remove() {
+    this.topElement.remove();
+    this.bottomElement.remove();
+  }
+
+  checkScore(submarineFront) {
+    if (!this.scored && this.x + this.width < submarineFront) {
+      this.scored = true;
+      score = score + 1;
+      updateHUD();
+    }
+  }
 }
 
 
+function spawnObstacle() {
+  obstacles.push(new Obstacle());
+}
 
 function startObstacleSpawn() {
   clearInterval(obstacleSpawnId);
@@ -51,36 +66,22 @@ function startObstacleSpawn() {
   obstacleSpawnId = setInterval(spawnObstacle, obstacleSpawnDelay);
 }
 
-
-// Called every frame by gameLoop() in game.js.
 function moveObstacles() {
-  for (let index = 0; index < obstacles.length; index = index + 1) {
-    const obstacle = obstacles[index];
+  for (let i = 0; i < obstacles.length; i = i + 1) {
+    const obstacle = obstacles[i];
+    obstacle.move();
 
-
-    obstacle.x = obstacle.x - obstacleSpeed;
-
-    obstacle.topElement.style.left    = obstacle.x + "px";
-    obstacle.bottomElement.style.left = obstacle.x + "px";
-
-
-    if (obstacle.x + obstacle.width < 0) {
-      obstacle.topElement.remove();
-      obstacle.bottomElement.remove();
-      obstacles.splice(index, 1);
-
-      index = index - 1;
+    if (obstacle.isOffScreen()) {
+      obstacle.remove();
+      obstacles.splice(i, 1);
+      i = i - 1;
     }
   }
 }
 
 function updateScore() {
   const submarineFront = submarine.offsetLeft + submarine.offsetWidth;
-  obstacles.forEach(function(obstacle) {
-    if(!obstacle.scored && obstacle.x + obstacle.width < submarineFront) {
-      obstacle.scored = true;
-      score = score + 1;
-      updateHUD();
-    }
+  obstacles.forEach(function (obstacle) {
+    obstacle.checkScore(submarineFront);
   });
 }

@@ -72,6 +72,51 @@ body {
   
 }
 
+.easy-btn,
+.medium-btn,
+.hard-btn {
+  margin-top: 9px;
+  padding: 7px 14px;
+  border: 2px solid #fffd8f;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #2c4cff 0%, #0aa7d5 100%);
+  color: #000000;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.easy-btn.selected,
+.medium-btn.selected,
+.hard-btn.selected {
+  margin-top: 9px;
+  padding: 7px 14px;
+  border: 2px solid #afff8f;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #d1ff2c 0%, #0aa7d5 100%);
+  color: #04243a;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.select-difficulty {
+  max-width: 260px;
+  margin-top: 12px;
+  padding: 14px 18px;
+  border-radius: 18px;
+  background: rgba(4, 27, 46, 0.582);
+  color: #f2fbff;
+  font-size: 1rem;
+  line-height: 1.6;
+  text-align: center;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
+}
+
 .start-screen .instructions {
   max-width: 360px;
   margin-top: 12px;
