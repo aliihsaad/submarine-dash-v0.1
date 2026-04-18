@@ -229,13 +229,7 @@ body {
   50%       { opacity: 0.2; }
 }
 
-/* ── OBSTACLES ──────────────────────────────────────────────
-   Tip: obstacles are created by JavaScript using createElement
-   These styles will apply to those elements via their class name
-   - position: absolute
-   - give them a fixed width (e.g. 60px)
-   - use a rock-like color or background-image from assets/
-   ─────────────────────────────────────────────────────────── */
+/* ── OBSTACLES ── */
 
 .obstacle {
   position: absolute;
@@ -251,11 +245,7 @@ body {
 }
 
 
-/* ── OXYGEN TANK ────────────────────────────────────────────
-   Tip: same as obstacles — created by JavaScript
-   Make it look visually distinct from obstacles
-   A bright cyan or teal color works well for an oxygen tank
-   ─────────────────────────────────────────────────────────── */
+/* ── OXYGEN TANK ── */
 
 .oxygen-tank {
   position: absolute;
@@ -274,10 +264,7 @@ body {
 }
 
 
-/* ── GAME OVER SCREEN ───────────────────────────────────────
-   Tip: same layout as start screen
-   Show the final score in a large readable font
-   ─────────────────────────────────────────────────────────── */
+/* ── GAME OVER SCREEN ── */
 
 .game-over {
   display: flex;
@@ -312,10 +299,7 @@ body {
 }
 
 
-/* ── BUTTONS ────────────────────────────────────────────────
-   Tip: style .start-btn and .restart-btn together
-   They can share the same visual style
-   ─────────────────────────────────────────────────────────── */
+
 .start-btn,
 .restart-btn {
   margin-top: 24px;
@@ -334,12 +318,6 @@ body {
 
 
 
-
-/* ── UTILITY CLASS ──────────────────────────────────────────
-   This class hides elements. JavaScript adds/removes it
-   to switch between screens.
-   ─────────────────────────────────────────────────────────── */
-
 .hidden {
   display: none;
 }
@@ -347,11 +325,8 @@ body {
 
 /* ============================================================
    SUBMARINE VISUAL CSS
-   Extracted and adapted from original submarine animation.
-   Original was landscape/centered — adapted here for:
-     • Portrait game container (480px × 600px)
-     • Submarine faces RIGHT (scaleX(-1) applied on .submarine)
-     • Scaled to 50% of original size
+   Extracted from Codepen and adapted from original submarine animation.
+  
    ============================================================ */
 
 /* ── Color palette ─────────────────────────────────────────── */
@@ -567,7 +542,7 @@ body {
 .bubble-4 { top: 60%; left: 1%; opacity: 0; animation: move-right 1s infinite linear; animation-delay: 1.00s; }
 
 
-/* ── Sea floor (decorative, z-index 1 so it sits behind gameplay) */
+/* ── Sea floor */
 .sea-ground__container {
   position: absolute;
   bottom: 0;
@@ -666,9 +641,5 @@ body {
   to   { left: -15%; }
 }
 
-/* ================= */
 
-.hidden {
-    display: none;
-}
 

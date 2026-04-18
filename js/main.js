@@ -5,15 +5,12 @@ const restartBtn = document.querySelector(".restart-btn")
 
 
 
-// to be deleted after mvp completed
-divBtn.addEventListener("click", function () {
-    nextPage();
-});
-console.log ("Next btn Clicked");
+
 
 
 restartBtn.addEventListener("click", function () {
    restartGame();
+   startGame();
 });
 
 
@@ -24,4 +21,13 @@ startBtn.addEventListener("click", function () {
 });
 console.log ("Start btn Clicked");
 
+
+document.addEventListener("keydown", function (event) {
+
+  if (event.code === "Space" || event.code === "ArrowUp") {
+
+    event.preventDefault();
+    boostSubmarine();
+  }
+});
 

@@ -1,10 +1,14 @@
 const startScreen = document.querySelector(".start-screen");
 const gameContainer = document.querySelector(".game-container");
-const gameOverScreen = document.querySelector(".game-over")
-const gameArea = document.querySelector(".game-area")
-const submarine = document.querySelector(".submarine")
-const countdownNumber = document.querySelector(".countdown-number")
-const countdownElement = document.querySelector(".countdown-overlay")
+const gameOverScreen = document.querySelector(".game-over");
+const gameArea = document.querySelector(".game-area");
+const submarine = document.querySelector(".submarine");
+const countdownNumber = document.querySelector(".countdown-number");
+const countdownElement = document.querySelector(".countdown-overlay");
+
+
+
+const finalScoreDisplay = document.querySelector(".final-score-value");
 
 
 let submarineY;
@@ -16,39 +20,49 @@ let velocity;
 let obstacles;
 let obstacleSpawnId;
 
+let gameLoopId;
+let countdownTimeoutId;
+let hitRecoveryTimeoutId;
+let oxygenDrainId;
+
+// Elements
+let obstacle;
+let oxygenTanks;
+
+let isInvincible;
 
 
 
 
 
-// to be deleted after mvp completed (only for div)
-function nextPage() {
-    startScreen.classList.add("hidden");
-    gameContainer.classList.add("hidden");
-    gameOverScreen.classList.remove("hidden");
-}
+
 
 function startCountdown() {
-  const countdownArr = ["3", "2", "1"];
+  const countdownValues = ["3", "2", "1"];
   let currentIndex = 0;
-
+  countdownNumber.innerText = countdownValues[currentIndex];
   countdownElement.classList.remove("hidden");
-  countdownNumber.innerText = countdownArr[currentIndex];
 
-  const intervalId = setInterval(() => {
-    currentIndex++;
 
-    if (currentIndex < countdownArr.length) {
-      countdownNumber.innerText = countdownArr[currentIndex];
-    } else {
-      clearInterval(intervalId);
+  function showNextNumber() {
+    currentIndex = currentIndex + 1;
+
+
+    if (currentIndex >= countdownValues.length) {
       countdownElement.classList.add("hidden");
+
+
       gameRunning = true;
+      startOxygenDrain();
       startObstacleSpawn();
+      gameLoop();
+      return;
     }
 
-
-  }, 1000);
+    countdownNumber.innerText = countdownValues[currentIndex];
+    countdownTimeoutId = setTimeout(showNextNumber, 1000);
+  }
+  countdownTimeoutId = setTimeout(showNextNumber, 1000);
 }
 
 
@@ -66,7 +80,7 @@ function startGame() {
     gameContainer.classList.remove("hidden");
 
 // submarine position on start
-    submarineY = (gameArea.offsetHeight - submarine.offsetHeight) / 2;
+    submarineY = (gameArea.offsetHeight - submarine.offsetHeight) / 2; // position the submarine in the middle of the game area
     submarine.style.top = submarineY + "px";
     submarine.classList.remove("invincible"); // make sure blink animation is off
 
@@ -75,33 +89,155 @@ function startGame() {
 }
 
 
-function gameloop() {
-  if (!gameRunning) {
+function gameLoop() {
+  if (!gameRunning) 
     return;
-  }
-
+  updateSubmarine();
+  checkBounds();
   moveObstacles();
+  updateScore();
   checkCollisions();
 
-  requestAnimationFrame(gameloop);
+  
+  gameLoopId = requestAnimationFrame(gameLoop);
 }
-
 
 
 function checkCollisions() {
+  // because the submarine body is big
+  const submarineRect = shrinkRect(
+    submarine.getBoundingClientRect(),
+    submarineHitInsetX,
+    submarineHitInsetY
+  );
+
+  // ── Check: did the sub hit a pipe? ──────────────────────────
+  for (let index = 0; index < obstacles.length; index = index + 1) {
+    const obstacle = obstacles[index];
+
+    // Get the shrunk hitbox for each pipe.
+    const topRect = shrinkRect(
+      obstacle.topElement.getBoundingClientRect(),
+      obstacleHitInsetX,
+      obstacleHitInsetY
+    );
+    const bottomRect = shrinkRect(
+      obstacle.bottomElement.getBoundingClientRect(),
+      obstacleHitInsetX,
+      obstacleHitInsetY
+    );
+
+    // rectanglesOverlap() returns true if the two rects touch or overlap.
+    // We check against BOTH the top and bottom pipe of this pair.
+    if (
+      rectanglesOverlap(submarineRect, topRect) ||
+      rectanglesOverlap(submarineRect, bottomRect)
+    ) {
+      // ── Invincibility check ──────────────────────────────────
+      // If the sub is already in a post-hit invincibility window,
+      // skip this collision entirely and move to the next obstacle.
+      if (isInvincible) continue;
+
+      // ── Apply the oxygen penalty ─────────────────────────────
+      // Math.max(0, ...) clamps oxygen so it never goes below 0.
+      oxygenLevel = Math.max(0, oxygenLevel - collisionOxygenPenalty);
+
+      // ── Remove the collided obstacle from DOM and array ──────
+      obstacle.topElement.remove();
+      obstacle.bottomElement.remove();
+      obstacles.splice(index, 1);
+      // (No index-- here because we immediately return after this hit.)
+
+      // Sync the oxygen bar to reflect the new lower value.
+      updateHUD();
+
+      // ── Check if this hit killed the player ──────────────────
+      if (oxygenLevel <= 0) {
+        endGame();
+        return; // stop checking — game is over
+      }
+
+      // ── Start the invincibility window ───────────────────────
+      // handleHit() adds the "invincible" CSS class (blink animation)
+      // and sets isInvincible = true for hitInvincibilityMs (1000ms).
+      handleHit(); // defined in player.js
+
+      return; // only one hit per frame — stop checking other obstacles
+    }
+  }
+
 
 }
 
-
 function endGame() {
+  gameRunning = false;
+
+  cancelAnimationFrame(gameLoopId);
+  clearInterval(oxygenDrainId);
+  clearInterval(obstacleSpawnId);
+  
+  clearTimeout(countdownTimeoutId);
+  clearTimeout(hitRecoveryTimeoutId);
+
+  countdownElement.classList.add("hidden");
+  submarine.classList.remove("invincible");
+  finalScoreDisplay.innerText = score;
+  gameContainer.classList.add("hidden");
+  gameOverScreen.classList.remove("hidden");
     
 }
 
 
 function restartGame() {
-    startScreen.classList.remove("hidden");
-    gameContainer.classList.add("hidden");
-    gameOverScreen.classList.add("hidden");
+  clearInterval(obstacleSpawnId);
+  cancelAnimationFrame(gameLoopId);
+  clearTimeout(countdownTimeoutId);
+
+  countdownElement.classList.add("hidden");
+  submarine.classList.remove("invincible");
+
+  obstacles.forEach(function (obstacle) {
+    obstacle.topElement.remove();
+    obstacle.bottomElement.remove();
+  });
+
+obstacles = [];
 }
 
+
+
+function rectanglesOverlap(firstRect, secondRect) {
+  return (
+    firstRect.left   < secondRect.right  &&   // first hasn't passed second on the left
+    firstRect.right  > secondRect.left   &&   // first hasn't passed second on the right
+    firstRect.top    < secondRect.bottom &&   // first hasn't passed second above
+    firstRect.bottom > secondRect.top        // first hasn't passed second below
+  );
+}
+
+
+// ─────────────────────────────────────────────────────────────
+// shrinkRect(rect, insetX, insetY)
+// Returns a NEW rectangle that is smaller than the input rect.
+//
+// getBoundingClientRect() returns the FULL visual bounding box.
+// Shrinking it makes the effective hitbox smaller than the visual.
+// This is called "forgiveness hitbox" — it makes the game feel fair.
+//
+// Example with insetX=8, insetY=6:
+//   Original: left=50, right=150, top=100, bottom=200
+//   Shrunk:   left=58, right=142, top=106, bottom=194
+//
+// Note: this returns a plain object { left, right, top, bottom },
+// NOT a real DOMRect. That's fine — rectanglesOverlap() only reads
+// those four properties, so it works the same way.
+// ─────────────────────────────────────────────────────────────
+function shrinkRect(rect, insetX, insetY) {
+  return {
+    left:   rect.left   + insetX,  // push left edge INWARD (to the right)
+    right:  rect.right  - insetX,  // push right edge INWARD (to the left)
+    top:    rect.top    + insetY,  // push top edge INWARD (downward)
+    bottom: rect.bottom - insetY,  // push bottom edge INWARD (upward)
+  };
+}
 
