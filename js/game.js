@@ -31,6 +31,9 @@ let oxygenTanks;
 
 let isInvincible;
 
+let missiles;
+let missileSpawnId;
+
 
 
 
@@ -55,6 +58,7 @@ function startCountdown() {
       gameRunning = true;
       startOxygenDrain();
       startObstacleSpawn();
+      if (difficulty === "hard") startMissileSpawn();
       gameLoop();
       return;
     }
@@ -72,7 +76,8 @@ function startGame() {
     oxygenLevel = 100;
     velocity = 0;
     gameRunning = false;
-    obstacles    = [];   // empty — no obstacles yet
+    obstacles    = [];
+    missiles = [];   // empty — no obstacles yet
     
 
     startScreen.classList.add("hidden");
@@ -95,6 +100,7 @@ function gameLoop() {
   updateSubmarine();
   checkBounds();
   moveObstacles();
+  moveMissiles();
   updateScore();
   checkCollisions();
 
@@ -166,6 +172,25 @@ function checkCollisions() {
     }
   }
 
+  for (let i = 0; i < missiles.length; i = i + 1) {
+  const m = missiles[i];
+  const missileRect = shrinkRect(
+    m.element.getBoundingClientRect(),
+    missileHitInsetX,
+    missileHitInsetY
+  );
+  if (rectanglesOverlap(submarineRect, missileRect)) {
+    if (isInvincible) continue;
+    oxygenLevel = Math.max(0, oxygenLevel - collisionOxygenPenalty);
+    m.element.remove();
+    missiles.splice(i, 1);
+    updateHUD();
+    if (oxygenLevel <= 0) { endGame(); return; }
+    handleHit();
+    return;
+  }
+}
+
 
 }
 
@@ -175,6 +200,7 @@ function endGame() {
   cancelAnimationFrame(gameLoopId);
   clearInterval(oxygenDrainId);
   clearInterval(obstacleSpawnId);
+  clearInterval(missileSpawnId); 
   
   clearTimeout(countdownTimeoutId);
   clearTimeout(hitRecoveryTimeoutId);
@@ -190,8 +216,10 @@ function endGame() {
 
 function restartGame() {
   clearInterval(obstacleSpawnId);
+  clearInterval(missileSpawnId); 
   cancelAnimationFrame(gameLoopId);
   clearTimeout(countdownTimeoutId);
+
 
   countdownElement.classList.add("hidden");
   submarine.classList.remove("invincible");

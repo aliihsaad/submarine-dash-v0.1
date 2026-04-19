@@ -79,6 +79,45 @@ function moveObstacles() {
   }
 }
 
+// Messiles
+
+function spawnMissile() {
+  const el = document.createElement("img");
+  const x = gameArea.offsetWidth;
+  const y = Math.floor(Math.random() * (gameArea.offsetHeight - missileHeight));
+
+  el.classList.add("missile");
+  el.src = missileAsset;
+  el.alt = "";
+  el.style.position = "absolute";
+  el.style.left = x + "px";
+  el.style.top = y + "px";
+  el.style.width  = missileWidth + "px";
+  el.style.height = missileHeight + "px";
+
+  missiles.push({ element: el, x: x, width: missileWidth });
+  gameArea.appendChild(el);
+}
+
+function startMissileSpawn() {
+  clearInterval(missileSpawnId);
+  missileSpawnId = setInterval(spawnMissile, missileSpawnDelay);
+}
+
+function moveMissiles() {
+  for (let i = 0; i < missiles.length; i = i + 1) {
+    const m = missiles[i];
+    m.x = m.x - missileSpeed;
+    m.element.style.left = m.x + "px";
+
+    if (m.x + m.width < 0) {
+      m.element.remove();
+      missiles.splice(i, 1);
+      i = i - 1;
+    }
+  }
+}
+
 function updateScore() {
   const submarineFront = submarine.offsetLeft + submarine.offsetWidth;
   obstacles.forEach(function (obstacle) {

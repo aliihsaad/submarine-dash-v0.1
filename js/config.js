@@ -9,6 +9,14 @@ const obstacleAsset = "assets/obstacles/pipe-green.png";
 const obstacleHitInsetX = 8;
 const obstacleHitInsetY = 6;
 const obstacleGap = 220;
+/ ==Missiles== /
+const missileAsset = "assets/obstacles/missile.png";
+const missileWidth = 60;
+const missileHeight = 24;
+let missileSpeed = 6;
+const missileSpawnDelay = 5000;
+const missileHitInsetX = 4;
+const missileHitInsetY = 4;
 
 const submarineHitInsetX = 18;
 const submarineHitInsetY = 12;

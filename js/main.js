@@ -5,6 +5,8 @@ const easyBtn = document.querySelector(".easy-btn")
 const mediumBtn = document.querySelector(".medium-btn")
 const hardBtn = document.querySelector(".hard-btn")
 
+let difficulty = "easy";
+
 
 
 
@@ -35,13 +37,17 @@ document.addEventListener("keydown", function (event) {
 
 hardBtn.addEventListener("click", function () {
     obstacleSpeed = 6;
+    missileSpeed = 8;
+    difficulty = "hard";
     hardBtn.classList.add("selected");
     easyBtn.classList.remove("selected");
     mediumBtn.classList.remove("selected");
 });
 
 mediumBtn.addEventListener("click", function () {
-    obstacleSpeed = 4;
+    obstacleSpeed = 5;
+    missileSpeed = 8;
+    difficulty = "medium";
     hardBtn.classList.remove("selected");
     easyBtn.classList.remove("selected");
     mediumBtn.classList.add("selected");
@@ -49,6 +55,8 @@ mediumBtn.addEventListener("click", function () {
 
 easyBtn.addEventListener("click", function () {
     obstacleSpeed = 2;
+    missileSpeed = 6;
+    difficulty = "easy";
     hardBtn.classList.remove("selected");
     easyBtn.classList.add("selected");
     mediumBtn.classList.remove("selected");
