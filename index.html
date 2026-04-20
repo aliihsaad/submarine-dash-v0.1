@@ -11,6 +11,7 @@
         <!-- Intro Screen -->
          <section class="start-screen">
             <img src="assets/images/logo.png" alt="Submarine Dash" class="start-logo" />
+            <button class="audio-btn"></button>
             <p class="instructions">Prss <strong>Space</strong> or <strong>Arrow Up</strong> to swim upward.<br> Avoid pipes. Collect oxygen tanks. Survive.</p>
             <button class="start-btn"> <strong>Start</strong> </button>
             <section class="select-difficulty"> 
@@ -31,6 +32,7 @@
                     <div class="oxygen-bar-header">
                         <p class="oxygen-label">Oxygen Level:</p>
                         <span class="oxygen-percentage">100%</span>
+                        <p class="difficulty">Easy</p>
                     </div>
                     <div class="oxygen-bar-fill"></div>
                 </div>
@@ -130,6 +132,12 @@
       <section class="game-over hidden">
         <img src="assets/images/game-over.png" alt="Game Over" class="game-over-image" />
         <p class="final-score-display">Score: <span class="final-score-value">0</span></p>
+        <div class="high-score-container">
+         <h3>High Scores</h3>
+          <ol id="high-score-list">
+        <!-- Scores will be added here by JavaScript -->
+         </ol>
+     </div>
         <button class="restart-btn">Play Again</button>
       </section>
 
@@ -141,9 +149,10 @@
     <script src="js/player.js"></script>
     <script src="js/booster.js"></script>
     <script src="js/obstacles.js"></script>
+    <script src="js/game.js"></script>
     <script src="js/oxygen.js"></script>
     <script src="js/ui.js"></script>
-    <script src="js/game.js"></script>
+    
     <script src="js/main.js"></script>
     
   </body>

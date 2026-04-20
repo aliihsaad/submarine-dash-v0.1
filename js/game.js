@@ -5,10 +5,10 @@ const gameArea = document.querySelector(".game-area");
 const submarine = document.querySelector(".submarine");
 const countdownNumber = document.querySelector(".countdown-number");
 const countdownElement = document.querySelector(".countdown-overlay");
-
-
-
 const finalScoreDisplay = document.querySelector(".final-score-value");
+const difficultyElement = document.querySelector(".difficulty");
+ 
+
 
 
 let submarineY;
@@ -26,6 +26,7 @@ let countdownTimeoutId;
 let hitRecoveryTimeoutId;
 let oxygenDrainId;
 let boosterTimeoutId;
+let oxygenTankSpawnId;
 
 // Elements
 let obstacle;
@@ -39,10 +40,33 @@ let missileSpawnId;
 let boosters;
 let boosterSpawnId;
 
+let topThree;
+let scores;
 
+function saveHighScore(newScore) {
+    // 1. Get existing scores or empty array
+    scores = JSON.parse(localStorage.getItem('highScores')) || [];
+    
+    // 2. Add new score, sort descending, and take the top 3
+    scores.push(newScore);
+    scores.sort((a, b) => b - a);
+    topThree = scores.slice(0, 3);
+    
+    
+    // 3. Save back to localStorage
+    localStorage.setItem('highScores', JSON.stringify(topThree));
+    renderHighScores(topThree);
+}
 
+function renderHighScores(scores = null) {
+    const scoreDisplay = document.getElementById('high-score-list');
+    if (!scoreDisplay) return;
 
-
+    const highScores = scores || JSON.parse(localStorage.getItem('highScores')) || [];
+    scoreDisplay.innerHTML = highScores
+        .map((score, index) => `<li><strong>: ${score}</strong></li>`)
+        .join('');
+}
 
 
 function startCountdown() {
@@ -64,7 +88,8 @@ function startCountdown() {
       startOxygenDrain();
       startObstacleSpawn();
       startBoosterSpawn();
-      if (difficulty === "hard") startMissileSpawn();
+      startOxygenTankSpawn();
+      if (difficulty === "Medium" || difficulty === "Hard") startMissileSpawn();
       gameLoop();
       return;
     }
@@ -81,6 +106,7 @@ function startGame() {
   cancelAnimationFrame(gameLoopId);
   clearTimeout(countdownTimeoutId);
   clearTimeout(hitRecoveryTimeoutId);
+
     score = 0;
     oxygenLevel = 100;
     velocity = 0;
@@ -88,11 +114,13 @@ function startGame() {
     obstacles    = [];
     missiles = [];
     boosters = [];
+    oxygenTanks = [];
     
 
     startScreen.classList.add("hidden");
     gameOverScreen.classList.add("hidden");
     gameContainer.classList.remove("hidden");
+    difficultyElement.innerText = difficulty;
 
 // submarine position on start
     submarineY = (gameArea.offsetHeight - submarine.offsetHeight) / 2; // position the submarine in the middle of the game area
@@ -105,10 +133,13 @@ function startGame() {
 
 
 function gameLoop() {
+  boostersSpeed = obstacleSpeed;
+  oxygenTanksSpeed = obstacleSpeed;
   if (!gameRunning) 
     return;
   updateSubmarine();
   checkBounds();
+  moveOxygenTanks();
   moveObstacles();
   moveMissiles();
   moveBoosters();
@@ -202,42 +233,63 @@ function checkCollisions() {
     }
   }
 
-    for (let index = 0; index < boosters.length; index = index + 1) {
-    const booster = boosters[index];
+    for (let j = 0; j < boosters.length; j++) {
+    const booster = boosters[j];
     const boosterRect = booster.element.getBoundingClientRect();
 
      if (rectanglesOverlap(submarineRect, boosterRect)) {
       handleBooster();
       booster.element.remove();
-      boosters.splice(index, 1);
-      index = index - 1;
+      boosters.splice(j, 1);
+      j--;
     }
+  }
+
+  for (let k = 0; k < oxygenTanks.length; k++) {
+    const tank = oxygenTanks[k];
+    const tankRect = tank.element.getBoundingClientRect();
+     if (rectanglesOverlap(submarineRect, tankRect)) {
+     const tankSound = new Audio(sonar);                                                                                                       
+     if (!isMuted) tankSound.play();
+      oxygenLevel = Math.min(oxygenLevel + 25, 100);
+      tank.element.remove();
+      oxygenTanks.splice(k, 1);
+     }
   }
 }
 
-function endGame() {
-  gameRunning = false;
+  function endGame() {
+    gameRunning = false;
 
-  cancelAnimationFrame(gameLoopId);
-  clearInterval(oxygenDrainId);
-  clearInterval(obstacleSpawnId);
-  clearInterval(missileSpawnId); 
-  
-  clearTimeout(countdownTimeoutId);
-  clearTimeout(hitRecoveryTimeoutId);
+    cancelAnimationFrame(gameLoopId);
+    clearInterval(oxygenDrainId);
+    clearInterval(obstacleSpawnId);
+    clearInterval(missileSpawnId);
+    clearInterval(oxygenTankSpawnId);
+    clearTimeout(countdownTimeoutId);
+    clearTimeout(hitRecoveryTimeoutId);
 
-  countdownElement.classList.add("hidden");
-  submarine.classList.remove("invincible");
-  finalScoreDisplay.innerText = score;
-  gameContainer.classList.add("hidden");
-  gameOverScreen.classList.remove("hidden");
-    
-}
+    saveHighScore(score);
+
+    const gameOverSound = new Audio('assets/audio/gameOver.mp3');
+    gameOverSound.play();
+
+    setTimeout(function () {
+      renderHighScores(topThree);
+      countdownElement.classList.add("hidden");
+      submarine.classList.remove("invincible");
+      finalScoreDisplay.innerText = score;
+      gameContainer.classList.add("hidden");
+      gameOverScreen.classList.remove("hidden");
+    }, 2000);
+  }
 
 
 function restartGame() {
+  cancelAnimationFrame(gameLoopId);
   clearInterval(obstacleSpawnId);
   clearInterval(missileSpawnId); 
+  clearInterval(oxygenTankSpawnId);
   cancelAnimationFrame(gameLoopId);
   clearTimeout(countdownTimeoutId);
 
@@ -245,12 +297,31 @@ function restartGame() {
   countdownElement.classList.add("hidden");
   submarine.classList.remove("invincible");
 
+  // Clear all existing game elements from DOM
   obstacles.forEach(function (obstacle) {
     obstacle.topElement.remove();
     obstacle.bottomElement.remove();
   });
+  
+  missiles.forEach(function (missile) {
+    missile.element.remove();
+  });
+  
+  boosters.forEach(function (booster) {
+    booster.element.remove();
+  });
+  
+  oxygenTanks.forEach(function (tank) {
+    tank.element.remove();
+  });
 
-obstacles = [];
+    obstacles = [];
+    missiles = [];
+    boosters = [];
+    oxygenTanks = [];
+    
+
+
 }
 
 

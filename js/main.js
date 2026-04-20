@@ -5,7 +5,12 @@ const easyBtn = document.querySelector(".easy-btn")
 const mediumBtn = document.querySelector(".medium-btn")
 const hardBtn = document.querySelector(".hard-btn")
 
+const audioBtn = document.querySelector('.audio-btn');                                                                                                              const bgMusic = new Audio('assets/audio/underWater.mp3');
+bgMusic.loop = true;                                                                                                                                          
+let isMuted = true;
+
 let difficulty = "easy";
+
 
 
 
@@ -32,22 +37,27 @@ document.addEventListener("keydown", function (event) {
 
     event.preventDefault();
     boostSubmarine();
+const wooshSound = new Audio(woosh);                                                                            
+    if (!isMuted) wooshSound.play();
+
   }
 });
 
 hardBtn.addEventListener("click", function () {
-    obstacleSpeed = 6;
+    obstacleSpeed = 5;
     missileSpeed = 8;
-    difficulty = "hard";
+    collisionOxygenPenalty = 35;
+    difficulty = "Hard";
     hardBtn.classList.add("selected");
     easyBtn.classList.remove("selected");
     mediumBtn.classList.remove("selected");
 });
 
 mediumBtn.addEventListener("click", function () {
-    obstacleSpeed = 5;
+    obstacleSpeed = 3;
     missileSpeed = 8;
-    difficulty = "medium";
+    collisionOxygenPenalty = 30;
+    difficulty = "Medium";
     hardBtn.classList.remove("selected");
     easyBtn.classList.remove("selected");
     mediumBtn.classList.add("selected");
@@ -56,12 +66,24 @@ mediumBtn.addEventListener("click", function () {
 easyBtn.addEventListener("click", function () {
     obstacleSpeed = 2;
     missileSpeed = 6;
-    difficulty = "easy";
+    difficulty = "Easy";
     hardBtn.classList.remove("selected");
     easyBtn.classList.add("selected");
     mediumBtn.classList.remove("selected");
 });
 
+
+  audioBtn.addEventListener('click', function () {
+    isMuted = !isMuted;
+
+    if (isMuted) {
+      bgMusic.pause();
+      audioBtn.style.backgroundImage = "url('assets/decor/no-sound.png')";
+    } else {
+      bgMusic.play();
+      audioBtn.style.backgroundImage = "url('assets/decor/sound-on.png')";
+    }
+  });
 
 
 

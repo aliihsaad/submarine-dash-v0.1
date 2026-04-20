@@ -25,6 +25,18 @@ body {
 }
 
 /* Start Screen */
+.audio-btn {
+    background-image: url(../assets/decor/no-sound.png);                                                                                                        
+    background-size: cover;                                                                                                                                         background-color: transparent;                                                                                                                              
+    background-repeat: no-repeat;                                                                                                                               
+    width: 25px;
+    height: 25px;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    top: 16px;
+    right: 16px;
+}
 
 .start-screen,
 .game-container,
@@ -197,6 +209,14 @@ body {
   background: #d11009;
 }
 
+.difficulty {
+    color: #f2fbffe5;
+  font-size: 0.95rem;
+  font-weight: 700;
+  align-items: center;
+  padding-left: 50px;
+}
+
 /* ── GAME AREA ── */
 
 .game-area {
@@ -342,6 +362,61 @@ body {
   font-size: 0.95rem;
   text-align: center;
 }
+
+.high-score-container {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+    border: 1px solid #4ffeff;
+    width: 80%;
+    max-width: 300px;
+    text-align: center;
+}
+
+.high-score-container h3 {
+    margin: 0 0 10px 0;
+    font-size: 1.2rem;
+    color: #ffd700;
+    text-transform: uppercase;
+}
+
+#high-score-list {
+    list-style: none; /* Removes default dots/numbers */
+    counter-reset: score-counter;
+}
+
+#high-score-list li {
+    counter-increment: score-counter;
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+#high-score-list li::before {
+    content: counter(score-counter);
+    width: 25px;
+    height: 25px;
+    background-color: #4ffeff;
+    color: #000;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 15px;
+    font-weight: bold;
+}
+
+.high-score-item {
+    font-size: 1rem;
+    color: #d7efff;
+    margin-bottom: 5px;
+}
+
+
+
+
 
 
 

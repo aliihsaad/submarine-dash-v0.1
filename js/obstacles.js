@@ -82,21 +82,21 @@ function moveObstacles() {
 // Messiles
 
 function spawnMissile() {
-  const el = document.createElement("img");
+  const missileElement = document.createElement("img");
   const x = gameArea.offsetWidth;
   const y = Math.floor(Math.random() * (gameArea.offsetHeight - missileHeight));
 
-  el.classList.add("missile");
-  el.src = missileAsset;
-  el.alt = "";
-  el.style.position = "absolute";
-  el.style.left = x + "px";
-  el.style.top = y + "px";
-  el.style.width  = missileWidth + "px";
-  el.style.height = missileHeight + "px";
+  missileElement.classList.add("missile");
+  missileElement.src = missileAsset;
+  missileElement.alt = "";
+  missileElement.style.position = "absolute";
+  missileElement.style.left = x + "px";
+  missileElement.style.top = y + "px";
+  missileElement.style.width = missileWidth + "px";
+  missileElement.style.height = missileHeight + "px";
 
-  missiles.push({ element: el, x: x, width: missileWidth });
-  gameArea.appendChild(el);
+  missiles.push({ element: missileElement, x: x, width: missileWidth });
+  gameArea.appendChild(missileElement);
 }
 
 function startMissileSpawn() {

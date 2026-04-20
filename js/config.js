@@ -1,7 +1,7 @@
 
 // ==Obstacles== //
 const obstacleGapMargin = 70;
-const obstacleSpawnDelay = 2500;
+let obstacleSpawnDelay = 2500;
 let obstacleSpeed = 2;
 const obstacleWidth = 96;
 const obstacleHeight = 520;
@@ -30,6 +30,14 @@ const boosterHitInsetY = 4;
 
 const submarineHitInsetX = 18;
 const submarineHitInsetY = 12;
+
+// ==OxygenTank== //
+const oxygenTankAsset = "assets/decor/oxygen-tank.png";
+
+let oxygenTanksSpeed = obstacleSpeed;
+const oxygenTankSpawnDelay = 6500;
+const oxygenTankSize = 42;
+const oxygenTankMargin = 40;
  
 
 // ==Physics== //
@@ -37,12 +45,20 @@ const gravity = 0.4;
 const boostPower = -7;
 
 // ==Collision Penalty== //
-const collisionOxygenPenalty = 25;
+let collisionOxygenPenalty = 25;
 let hitInvincbilityTime = 1000;
 
 // ==Oxygen== //
 const oxygenDrainAmount = 2;
 const oxygenDrainDelay = 1000;
+
+// ==Audio== //
+let soundOn = false;
+const subHit = "assets/audio/subHit.mp3";
+const underWater = "assets/audio/underWater.mp3"
+const sonar = "assets/audio/sonar.mp3"
+const gameOver = "assets/audio/gameOver.mp3"
+const woosh = "assets/audio/woosh.mp3"
 
 
 

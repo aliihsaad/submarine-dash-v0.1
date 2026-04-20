@@ -29,6 +29,8 @@ function checkBounds() {
 }
 
 function handleHit() {
+    const hitSound = new Audio(subHit);                                                                            
+    if (!isMuted) hitSound.play(); 
     isInvincible = true;
     submarine.classList.add("invincible");
     clearTimeout(hitRecoveryTimeoutId);
@@ -40,6 +42,8 @@ function handleHit() {
 window.handleHit = handleHit;
 
 function handleBooster() {
+    const collectSound = new Audio(sonar);                                                                            
+    if (!isMuted) collectSound.play(); 
     isInvincible = true;
     hitInvincbilityTime = 8000;
     submarine.classList.add("invincible");
