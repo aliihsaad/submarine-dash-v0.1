@@ -44,16 +44,12 @@ let topThree;
 let scores;
 
 function saveHighScore(newScore) {
-    // 1. Get existing scores or empty array
     scores = JSON.parse(localStorage.getItem('highScores')) || [];
     
-    // 2. Add new score, sort descending, and take the top 3
     scores.push(newScore);
     scores.sort((a, b) => b - a);
     topThree = scores.slice(0, 3);
     
-    
-    // 3. Save back to localStorage
     localStorage.setItem('highScores', JSON.stringify(topThree));
     renderHighScores(topThree);
 }

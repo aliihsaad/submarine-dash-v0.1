@@ -5,7 +5,8 @@ const easyBtn = document.querySelector(".easy-btn")
 const mediumBtn = document.querySelector(".medium-btn")
 const hardBtn = document.querySelector(".hard-btn")
 
-const audioBtn = document.querySelector('.audio-btn');                                                                                                              const bgMusic = new Audio('assets/audio/underWater.mp3');
+const audioBtn = document.querySelector('.audio-btn');                                                                                                              
+const bgMusic = new Audio('assets/audio/underWater.mp3');
 bgMusic.loop = true;                                                                                                                                          
 let isMuted = true;
 
