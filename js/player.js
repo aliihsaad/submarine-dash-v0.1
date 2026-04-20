@@ -37,3 +37,17 @@ function handleHit() {
         submarine.classList.remove("invincible");
     }, hitInvincbilityTime);
 }
+window.handleHit = handleHit;
+
+function handleBooster() {
+    isInvincible = true;
+    hitInvincbilityTime = 8000;
+    submarine.classList.add("invincible");
+    clearTimeout(boosterTimeoutId);
+    boosterTimeoutId = setTimeout(function () {
+        isInvincible = false;
+        hitInvincbilityTime = 1000;
+        submarine.classList.remove("invincible");
+    }, hitInvincbilityTime);
+}
+window.handleBooster = handleBooster;

@@ -20,10 +20,12 @@ let velocity;
 let obstacles;
 let obstacleSpawnId;
 
+
 let gameLoopId;
 let countdownTimeoutId;
 let hitRecoveryTimeoutId;
 let oxygenDrainId;
+let boosterTimeoutId;
 
 // Elements
 let obstacle;
@@ -33,6 +35,9 @@ let isInvincible;
 
 let missiles;
 let missileSpawnId;
+
+let boosters;
+let boosterSpawnId;
 
 
 
@@ -58,6 +63,7 @@ function startCountdown() {
       gameRunning = true;
       startOxygenDrain();
       startObstacleSpawn();
+      startBoosterSpawn();
       if (difficulty === "hard") startMissileSpawn();
       gameLoop();
       return;
@@ -72,12 +78,16 @@ function startCountdown() {
 
 
 function startGame() {
+  cancelAnimationFrame(gameLoopId);
+  clearTimeout(countdownTimeoutId);
+  clearTimeout(hitRecoveryTimeoutId);
     score = 0;
     oxygenLevel = 100;
     velocity = 0;
     gameRunning = false;
     obstacles    = [];
-    missiles = [];   // empty — no obstacles yet
+    missiles = [];
+    boosters = [];
     
 
     startScreen.classList.add("hidden");
@@ -101,6 +111,7 @@ function gameLoop() {
   checkBounds();
   moveObstacles();
   moveMissiles();
+  moveBoosters();
   updateScore();
   checkCollisions();
 
@@ -179,19 +190,29 @@ function checkCollisions() {
     missileHitInsetX,
     missileHitInsetY
   );
-  if (rectanglesOverlap(submarineRect, missileRect)) {
-    if (isInvincible) continue;
-    oxygenLevel = Math.max(0, oxygenLevel - collisionOxygenPenalty);
-    m.element.remove();
-    missiles.splice(i, 1);
-    updateHUD();
-    if (oxygenLevel <= 0) { endGame(); return; }
-    handleHit();
-    return;
+    if (rectanglesOverlap(submarineRect, missileRect)) {
+     if (isInvincible) continue;
+     oxygenLevel = Math.max(0, oxygenLevel - collisionOxygenPenalty);
+     m.element.remove();
+     missiles.splice(i, 1);
+     updateHUD();
+      if (oxygenLevel <= 0) { endGame(); return; }
+      handleHit();
+      return;
+    }
   }
-}
 
+    for (let index = 0; index < boosters.length; index = index + 1) {
+    const booster = boosters[index];
+    const boosterRect = booster.element.getBoundingClientRect();
 
+     if (rectanglesOverlap(submarineRect, boosterRect)) {
+      handleBooster();
+      booster.element.remove();
+      boosters.splice(index, 1);
+      index = index - 1;
+    }
+  }
 }
 
 function endGame() {
