@@ -824,3 +824,48 @@ body {
 
 
 
+@media (max-width: 500px) {
+  .app {
+    width: 100vw;
+  }
+
+  .start-screen,
+  .game-container,
+  .game-over {
+    width: 100vw;
+    height: 100svh;
+    border-radius: 0;
+  }
+
+  .start-logo {
+    width: 80%;
+  }
+}
+
+/* Tablet: scale the game up to use more screen */
+@media (min-width: 501px) and (max-width: 900px) {
+  .app {
+    width: 90vw;
+  }
+  .start-screen,
+  .game-container,
+  .game-over {
+    width: 90vw;
+    height: 85vh;
+  }
+}
+
+/* Large screens / laptops: cap it so it doesn't stretch too wide */
+@media (min-width: 901px) {
+  .app {
+    width: 520px;
+  }
+  .start-screen,
+  .game-container,
+  .game-over {
+    width: 520px;
+    height: 800px;
+  }
+}
+
+

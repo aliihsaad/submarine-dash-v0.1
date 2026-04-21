@@ -34,12 +34,14 @@ console.log ("Start btn Clicked");
 
 
 document.addEventListener("keydown", function (event) {
+  if (!gameRunning) 
+    return;
 
   if (event.code === "Space" || event.code === "ArrowUp") {
 
     event.preventDefault();
     boostSubmarine();
-const wooshSound = new Audio(woosh);                                                                            
+    const wooshSound = new Audio(woosh);                                                                            
     if (!isMuted) wooshSound.play();
 
   }
@@ -74,6 +76,9 @@ easyBtn.addEventListener("click", function () {
     obstacleSpeed = 2;
     missileSpeed = 6;
     difficulty = "Easy";
+
+    title.classList.remove("m")
+    title.classList.remove("h")
     hardBtn.classList.remove("selected");
     easyBtn.classList.add("selected");
     mediumBtn.classList.remove("selected");
@@ -92,5 +97,18 @@ easyBtn.addEventListener("click", function () {
     }
   });
 
+
+
+
+  //Touch-screens//
+
+  document.addEventListener("touchstart", function (event) {
+    if (!gameRunning) return;
+    event.preventDefault();
+    boostSubmarine();
+    const wooshSound = new Audio(woosh);                                                                            
+    if (!isMuted) wooshSound.play();
+  }, { passive: false
+  });
 
 
