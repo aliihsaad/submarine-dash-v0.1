@@ -268,7 +268,7 @@ function checkCollisions() {
     saveHighScore(score);
 
     const gameOverSound = new Audio('assets/audio/gameOver.mp3');
-    gameOverSound.play();
+    if (!isMuted) gameOverSound.play();
 
     setTimeout(function () {
       renderHighScores(topThree);

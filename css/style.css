@@ -70,9 +70,7 @@ body {
   text-align: center;
 }
 
-#wording-color {
-  color: #b3d109;
-}
+
 
 .start-btn {
   margin-top: 24px;
@@ -197,9 +195,17 @@ body {
 }
 
 .oxygen-percentage {
-  color: #f2fbff;
+  color: #3cff8f;
   font-size: 0.95rem;
   font-weight: 700;
+}
+
+.oxygen-percentage.med-color {
+  color: #f7ac08;
+}
+
+.oxygen-percentage.low-color {
+  color: #d11009;
 }
 
 .oxygen-bar-container {
@@ -347,7 +353,7 @@ body {
 
 /* ── OXYGEN TANK ── */
 
-.oxygen-tank {
+/* .oxygen-tank {
   position: absolute;
   display: flex;
   justify-content: center;
@@ -361,7 +367,7 @@ body {
   box-shadow: 0 0 18px rgba(102, 246, 255, 0.45);
   z-index: 7;
   pointer-events: none;
-}
+} */
 
 
 /* ── GAME OVER SCREEN ── */

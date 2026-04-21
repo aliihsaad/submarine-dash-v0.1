@@ -50,7 +50,8 @@ hardBtn.addEventListener("click", function () {
     missileSpeed = 8;
     collisionOxygenPenalty = 35;
     difficulty = "Hard";
-    title.classList.toggle("h")
+    title.classList.add("h")
+    title.classList.remove("m")
     hardBtn.classList.add("selected");
     easyBtn.classList.remove("selected");
     mediumBtn.classList.remove("selected");
@@ -62,7 +63,8 @@ mediumBtn.addEventListener("click", function () {
     collisionOxygenPenalty = 30;
     difficulty = "Medium";
 
-    title.classList.toggle("m")
+    title.classList.add("m")
+    title.classList.remove("h")
     hardBtn.classList.remove("selected");
     easyBtn.classList.remove("selected");
     mediumBtn.classList.add("selected");
