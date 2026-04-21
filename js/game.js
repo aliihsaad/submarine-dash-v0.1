@@ -60,10 +60,10 @@ function renderHighScores(scores = null) {
 
     const highScores = scores || JSON.parse(localStorage.getItem('highScores')) || [];
     scoreDisplay.innerHTML = highScores
-        .map((score, index) => `<li><strong>: ${score}</strong></li>`)
+        .map((score, index) => `<li><strong> ${score}</strong></li>`)
         .join('');
 }
-
+ 
 
 function startCountdown() {
   const countdownValues = ["3", "2", "1"];

@@ -4,13 +4,14 @@ const restartBtn = document.querySelector(".restart-btn")
 const easyBtn = document.querySelector(".easy-btn")
 const mediumBtn = document.querySelector(".medium-btn")
 const hardBtn = document.querySelector(".hard-btn")
+const title = document.querySelector(".difficulty");
 
 const audioBtn = document.querySelector('.audio-btn');                                                                                                              
 const bgMusic = new Audio('assets/audio/underWater.mp3');
 bgMusic.loop = true;                                                                                                                                          
 let isMuted = true;
 
-let difficulty = "easy";
+let difficulty = "Easy";
 
 
 
@@ -49,6 +50,7 @@ hardBtn.addEventListener("click", function () {
     missileSpeed = 8;
     collisionOxygenPenalty = 35;
     difficulty = "Hard";
+    title.classList.toggle("h")
     hardBtn.classList.add("selected");
     easyBtn.classList.remove("selected");
     mediumBtn.classList.remove("selected");
@@ -59,6 +61,8 @@ mediumBtn.addEventListener("click", function () {
     missileSpeed = 8;
     collisionOxygenPenalty = 30;
     difficulty = "Medium";
+
+    title.classList.toggle("m")
     hardBtn.classList.remove("selected");
     easyBtn.classList.remove("selected");
     mediumBtn.classList.add("selected");

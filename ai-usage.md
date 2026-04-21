@@ -18,7 +18,6 @@ This file tracks every way AI was used during this project.
 
 ## Development
 
-*(Fill in as you build — be specific about what you asked and what you changed)*
 
 | What I asked | What AI suggested | What I did |
 |---|---|---|
