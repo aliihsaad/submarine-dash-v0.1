@@ -21,10 +21,10 @@ function startBoosterSpawn() {
   boosterSpawnId = setInterval(spawnBooster, boosterSpawnDelay);
 }
 
-function moveBoosters() {
+function moveBoosters(dtFactor) {
   for (let i = 0; i < boosters.length; i = i + 1) {
     const m = boosters[i];
-    m.x = m.x - boostersSpeed;
+    m.x = m.x - boostersSpeed * dtFactor;
     m.element.style.left = m.x + "px";
 
     if (m.x + m.width < 0) {

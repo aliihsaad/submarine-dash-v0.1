@@ -1,8 +1,8 @@
-function updateSubmarine() {
+function updateSubmarine(dtFactor) {
     if(!gameRunning) return;
 
-    velocity = velocity + gravity;
-    submarineY = submarineY + velocity;
+    velocity = velocity + gravity * dtFactor;
+    submarineY = submarineY + velocity * dtFactor;
     submarine.style.top = submarineY + "px";
 }
 

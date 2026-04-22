@@ -842,7 +842,7 @@ body {
   }
 }
 
-/* Tablet: scale the game up to use more screen */
+/* Tablet: scale the game up to use more screen
 @media (min-width: 501px) and (max-width: 900px) {
   .app {
     width: 90vw;
@@ -855,7 +855,7 @@ body {
   }
 }
 
-/* Large screens / laptops: cap it so it doesn't stretch too wide */
+Large screens / laptops: cap it so it doesn't stretch too wide */
 @media (min-width: 901px) {
   .app {
     width: 520px;

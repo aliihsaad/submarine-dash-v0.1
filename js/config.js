@@ -1,8 +1,13 @@
+// == Frame Rate == 
+const TARGET_FPS = 60;
+const TARGET_MS = 1000 / TARGET_FPS;
+
+
 
 // ==Obstacles== //
 const obstacleGapMargin = 70;
-let obstacleSpawnDelay = 2500;
-let obstacleSpeed = 2;
+let obstacleSpawnDelay = 3800;
+let obstacleSpeed = 2.5;
 const obstacleWidth = 96;
 const obstacleHeight = 520;
 const obstacleAsset = "assets/obstacles/pipe-green.png";
@@ -15,7 +20,7 @@ const missileAsset = "assets/obstacles/missile.png";
 const missileWidth = 60;
 const missileHeight = 24;
 let missileSpeed = 6;
-const missileSpawnDelay = 5000;
+let missileSpawnDelay = 5000;
 const missileHitInsetX = 4;
 const missileHitInsetY = 4;
 
@@ -41,8 +46,8 @@ const oxygenTankMargin = 40;
  
 
 // ==Physics== //
-const gravity = 0.4;
-const boostPower = -7;
+const gravity = 0.45;
+const boostPower = -8;
 
 // ==Collision Penalty== //
 let collisionOxygenPenalty = 25;

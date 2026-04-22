@@ -48,10 +48,12 @@ document.addEventListener("keydown", function (event) {
 });
 
 hardBtn.addEventListener("click", function () {
-    obstacleSpeed = 5;
-    missileSpeed = 8;
+    obstacleSpeed = 6.5;
+    missileSpeed = 9;
     collisionOxygenPenalty = 35;
+    missileSpawnDelay = 3000;
     difficulty = "Hard";
+    obstacleSpawnDelay = 2000;
     title.classList.add("h")
     title.classList.remove("m")
     hardBtn.classList.add("selected");
@@ -60,10 +62,12 @@ hardBtn.addEventListener("click", function () {
 });
 
 mediumBtn.addEventListener("click", function () {
-    obstacleSpeed = 3;
+    obstacleSpeed = 5;
     missileSpeed = 8;
     collisionOxygenPenalty = 30;
+    missileSpawnDelay = 4000;
     difficulty = "Medium";
+    obstacleSpawnDelay = 2500;
 
     title.classList.add("m")
     title.classList.remove("h")
@@ -73,7 +77,7 @@ mediumBtn.addEventListener("click", function () {
 });
 
 easyBtn.addEventListener("click", function () {
-    obstacleSpeed = 2;
+    obstacleSpeed = 3;
     missileSpeed = 6;
     difficulty = "Easy";
 
@@ -100,7 +104,7 @@ easyBtn.addEventListener("click", function () {
 
 
 
-  //Touch-screens//
+  // //Touch-screens//
 
   document.addEventListener("touchstart", function (event) {
     if (!gameRunning) return;

@@ -35,10 +35,10 @@ function startOxygenTankSpawn() {
   oxygenTankSpawnId = setInterval(spawnOxygenTank, oxygenTankSpawnDelay);
 }
 
-function moveOxygenTanks() {
+function moveOxygenTanks(dtFactor) {
   for (let i = 0; i < oxygenTanks.length; i = i + 1) {
     const m = oxygenTanks[i];
-    m.x = m.x - oxygenTanksSpeed;
+    m.x = m.x - oxygenTanksSpeed * dtFactor;
     m.element.style.left = m.x + "px";
 
     if (m.x + m.width < 0) {

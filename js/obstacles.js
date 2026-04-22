@@ -31,8 +31,8 @@ class Obstacle {
     return el;
   }
 
-  move() {
-    this.x = this.x - obstacleSpeed;
+  move(dtFactor) {
+    this.x = this.x - obstacleSpeed * dtFactor;
     this.topElement.style.left = this.x + "px";
     this.bottomElement.style.left = this.x + "px";
   }
@@ -66,10 +66,10 @@ function startObstacleSpawn() {
   obstacleSpawnId = setInterval(spawnObstacle, obstacleSpawnDelay);
 }
 
-function moveObstacles() {
+function moveObstacles(dtFactor) {
   for (let i = 0; i < obstacles.length; i = i + 1) {
     const obstacle = obstacles[i];
-    obstacle.move();
+    obstacle.move(dtFactor);
 
     if (obstacle.isOffScreen()) {
       obstacle.remove();
@@ -104,10 +104,10 @@ function startMissileSpawn() {
   missileSpawnId = setInterval(spawnMissile, missileSpawnDelay);
 }
 
-function moveMissiles() {
+function moveMissiles(dtFactor) {
   for (let i = 0; i < missiles.length; i = i + 1) {
     const m = missiles[i];
-    m.x = m.x - missileSpeed;
+    m.x = m.x - missileSpeed * dtFactor;
     m.element.style.left = m.x + "px";
 
     if (m.x + m.width < 0) {

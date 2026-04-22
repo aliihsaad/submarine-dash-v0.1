@@ -43,6 +43,12 @@ let boosterSpawnId;
 let topThree;
 let scores;
 
+let lastTimestamp = null;
+
+
+
+// ==High Scores==
+
 function saveHighScore(newScore) {
     scores = JSON.parse(localStorage.getItem('highScores')) || [];
     
@@ -85,8 +91,8 @@ function startCountdown() {
       startObstacleSpawn();
       startBoosterSpawn();
       startOxygenTankSpawn();
-      if (difficulty === "Medium" || difficulty === "Hard") startMissileSpawn();
-      gameLoop();
+      startMissileSpawn();
+      gameLoopId = requestAnimationFrame(gameLoop);
       return;
     }
 
@@ -111,6 +117,8 @@ function startGame() {
     missiles = [];
     boosters = [];
     oxygenTanks = [];
+
+    lastTimestamp = null;
     
 
     startScreen.classList.add("hidden");
@@ -128,17 +136,23 @@ function startGame() {
 }
 
 
-function gameLoop() {
+function gameLoop(timestamp) {
   boostersSpeed = obstacleSpeed;
   oxygenTanksSpeed = obstacleSpeed;
   if (!gameRunning) 
     return;
-  updateSubmarine();
+
+  if (lastTimestamp === null) lastTimestamp =  timestamp - TARGET_MS;
+  const dt = timestamp - lastTimestamp;
+  lastTimestamp = timestamp;
+  const dtFactor = Math.min(dt / TARGET_MS, 3);
+
+  updateSubmarine(dtFactor);
   checkBounds();
-  moveOxygenTanks();
-  moveObstacles();
-  moveMissiles();
-  moveBoosters();
+  moveOxygenTanks(dtFactor);
+  moveObstacles(dtFactor);
+  moveMissiles(dtFactor);
+  moveBoosters(dtFactor);
   updateScore();
   checkCollisions();
 
@@ -271,6 +285,7 @@ function checkCollisions() {
     if (!isMuted) gameOverSound.play();
 
     setTimeout(function () {
+
       renderHighScores(topThree);
       countdownElement.classList.add("hidden");
       submarine.classList.remove("invincible");
@@ -316,38 +331,23 @@ function restartGame() {
     boosters = [];
     oxygenTanks = [];
     
-
+    lastTimestamp = null;
 
 }
 
 
-
+// == Collision Helper==
 function rectanglesOverlap(firstRect, secondRect) {
   return (
-    firstRect.left   < secondRect.right  &&   // first hasn't passed second on the left
-    firstRect.right  > secondRect.left   &&   // first hasn't passed second on the right
-    firstRect.top    < secondRect.bottom &&   // first hasn't passed second above
-    firstRect.bottom > secondRect.top        // first hasn't passed second below
+    firstRect.left   < secondRect.right  &&
+    firstRect.right  > secondRect.left   &&
+    firstRect.top    < secondRect.bottom &&
+    firstRect.bottom > secondRect.top     
   );
 }
 
 
-// ─────────────────────────────────────────────────────────────
-// shrinkRect(rect, insetX, insetY)
-// Returns a NEW rectangle that is smaller than the input rect.
-//
-// getBoundingClientRect() returns the FULL visual bounding box.
-// Shrinking it makes the effective hitbox smaller than the visual.
-// This is called "forgiveness hitbox" — it makes the game feel fair.
-//
-// Example with insetX=8, insetY=6:
-//   Original: left=50, right=150, top=100, bottom=200
-//   Shrunk:   left=58, right=142, top=106, bottom=194
-//
-// Note: this returns a plain object { left, right, top, bottom },
-// NOT a real DOMRect. That's fine — rectanglesOverlap() only reads
-// those four properties, so it works the same way.
-// ─────────────────────────────────────────────────────────────
+
 function shrinkRect(rect, insetX, insetY) {
   return {
     left:   rect.left   + insetX,  // push left edge INWARD (to the right)
