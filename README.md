@@ -23,7 +23,7 @@ A browser-based survival game where you pilot a submarine through underwater haz
 
 | Mode   | Obstacle Speed | Missiles | Oxygen Penalty |
 |--------|----------------|----------|----------------|
-| Easy   | Slow           | No       | 25             |
+| Easy   | Slow           | Yes      | 25             |
 | Medium | Moderate       | Yes      | 30             |
 | Hard   | Fast           | Yes      | 35             |
 
